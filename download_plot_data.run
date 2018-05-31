@@ -1,0 +1,30 @@
+#!/bin/bash
+
+export QT_QPA_PLATFORM=offscreen
+export DISPLAY=localhost:0
+export PATH=$NCARG_ROOT/bin:$PATH 
+python=/sw/jessie-x64/python/python-2.7-ve6-gccsys/bin/python
+
+cd /scratch/local1/m300382/snow/
+cp /home/mpim/m300382/snow_ims/*.py ./
+
+#Unfortunately first we have to locally transfer the images to move them
+ncftp altervista << EOF
+cd snow
+get *.png
+rm *.png
+bye
+EOF
+
+ncftpput -R -v altervista snow/archive *.png
+rm *.png
+
+#Now create the new plots
+
+${python} plot_data.py
+
+ncftpput -R -v altervista snow *.png
+
+rm *.png
+rm *.py
+
