@@ -1,28 +1,37 @@
 #!/bin/bash
+. $HOME/.profile
 
 export QT_QPA_PLATFORM=offscreen
 export DISPLAY=localhost:0
-export python=/home/mpim/m300382/.conda/envs/my_base/bin/python
-source /sw/stretch-x64/conda/anaconda3-5.3.0-python-3.7/bin/activate my_base
+export WORK_FOLDER=$HOME/ims/
+export SHAPEFILES_FOLDER=$HOME/shapefiles/
 
-cd /scratch/local1/m300382/snow/
-cp /home/mpim/m300382/snow_ims/*.py ./
+# Get doy 
+export doy=`date +"%j"`
+export year=`date +"%Y"`
+filename_1km="ftp://sidads.colorado.edu/pub/DATASETS/NOAA/G02156/1km/${year}/ims${year}${doy}_1km_v1.3.asc.gz"
 
-# Unfortunately first we have to locally transfer the images to move them
-ncftp altervista << EOF
+wget ${filename_1km}
+gunzip ims${year}${doy}_1km_v1.3.asc.gz
+sed -ne '9031,17030p' ims${year}${doy}_1km_v1.3.asc | cut -c11001-19000 > ims_${year}_${doy}_1km.asc
+
+rm ims${year}${doy}_1km_v1.3.asc
+
+# cd $HOME/ims
+
+#Now create the new plots
+/usr/bin/python plot_data.py
+
+# First we have to clean the server remotely 
+/usr/bin/ncftpput altervista << EOF
 cd snow
 rm *.png
 bye
 EOF
 
-#ncftpput -R -v altervista snow/archive *.png
-rm *.png
-#Now create the new plots
+# Then upload the new one
+/usr/bin/ncftpput -R -v altervista ims*.png
 
-${python} plot_data.py
-
-ncftpput -R -v altervista snow *.png
-
-rm *.png
-rm *.py
-
+# Cleanup 
+rm ims_${year}_${doy}_1km.asc
+rm ims*.png
