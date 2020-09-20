@@ -10,7 +10,7 @@ import map_projections_ims
 from matplotlib.offsetbox import AnchoredText
 import os
 
-base_folder = str(os.getenv['WORK_FOLDER'])
+base_folder = str(os.getenv('WORK_FOLDER'))
 coordinate_folder = base_folder
 DPI = 150
 # Define Color Map with discrete colors 
@@ -59,7 +59,7 @@ lon_4km = ims_reader.read_lons_4km(path=coordinate_folder)
 lat_4km = ims_reader.read_lats_4km(path=coordinate_folder)
 data_4km = ims_reader.read_data_4km(year=year, doy=doy)
 
-save_figure(base_folder, 'alps', lon_4km, lat_4km, data_4km)
+save_figure(base_folder, 'nh', lon_4km, lat_4km, data_4km)
 
 lon_1km, lat_1km = ims_reader.read_coordinates_1km_compressed(path=coordinate_folder)
 data_1km = ims_reader.read_data_1km_compressed(base_folder+'ims_%s_%s_1km.asc' % (year, doy))

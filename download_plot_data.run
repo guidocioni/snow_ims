@@ -1,10 +1,10 @@
 #!/bin/bash
-. $HOME/.profile
+#. $HOME/.profile
 
 export QT_QPA_PLATFORM=offscreen
 export DISPLAY=localhost:0
-export WORK_FOLDER=$HOME/ims/
-export SHAPEFILES_FOLDER=$HOME/shapefiles/
+export WORK_FOLDER=/Volumes/data/weather_models/snow_ims/
+export SHAPEFILES_FOLDER=/Volumes/data/weather_models/shapefiles/
 
 # Get doy 
 export doy=`date +"%j"`
@@ -17,20 +17,18 @@ sed -ne '9031,17030p' ims${year}${doy}_1km_v1.3.asc | cut -c11001-19000 > ims_${
 
 rm ims${year}${doy}_1km_v1.3.asc
 
-# cd $HOME/ims
-
 #Now create the new plots
-/usr/bin/python plot_data.py
+python plot_data.py
 
 # First we have to clean the server remotely 
-/usr/bin/ncftpput altervista << EOF
+ncftp altervista << EOF
 cd snow
 rm *.png
 bye
 EOF
 
 # Then upload the new one
-/usr/bin/ncftpput -R -v altervista ims*.png
+ncftpput -R -v altervista snow ims*.png
 
 # Cleanup 
 rm ims_${year}_${doy}_1km.asc

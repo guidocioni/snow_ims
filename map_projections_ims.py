@@ -2,7 +2,7 @@ from mpl_toolkits.basemap import Basemap  # Import the Basemap toolkit
 import numpy as np
 import os
 
-shape_dir = str(os.getenv['SHAPEFILES_FOLDER'])
+shape_dir = str(os.getenv('SHAPEFILES_FOLDER'))
 
 
 def get_projection(projection="eurasia"):
@@ -43,7 +43,7 @@ def get_projection(projection="eurasia"):
         bmap.drawmeridians(np.arange(-180., 181., 2.5),
                            linewidth=0.3, labels=[False, False, False, False])
         bmap.readshapefile(shape_dir+'/ITA_adm_shp/ITA_adm1',
-                           'ITA_adm1', linewidth=0.3, color='black')
+                           'ITA_adm1', linewidth=0.2, color='orange')
     elif projection == "alps":
         bmap = Basemap(projection="stere", lon_0=10.5, lat_0=45.8, boundinglat=0,
                        rsphere=6378160.0, ellps="WGS84", k_0=0.9330127018922193,
@@ -55,7 +55,7 @@ def get_projection(projection="eurasia"):
         bmap.drawmeridians(np.arange(-180., 181., 2.5),
                            linewidth=0.3, labels=[False, False, False, False])
         bmap.readshapefile(shape_dir+'/ITA_adm_shp/ITA_adm1',
-                           'ITA_adm1', linewidth=0.3, color='black')
+                           'ITA_adm1', linewidth=0.2, color='orange')
     else:
         raise ValueError(
             'Projection should be nh, eurasia, west_europe, italy or alps')
