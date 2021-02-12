@@ -1,15 +1,22 @@
 #!/bin/bash
-#. $HOME/.profile
+
+# Cd into our working directory in case we're not into it already
+cd "$(dirname "$0")";
 
 export QT_QPA_PLATFORM=offscreen
 export DISPLAY=localhost:0
-export WORK_FOLDER=/Volumes/data/weather_models/snow_ims/
-export SHAPEFILES_FOLDER=/Volumes/data/weather_models/shapefiles/
+export WORK_FOLDER=/tmp/snow_ims/
+export SHAPEFILES_FOLDER=/home/ekman/guido/icon_forecasts/plotting/shapefiles/
+export HOME_FOLDER=$(pwd)
 
 # Get doy 
 export doy=`date +"%j"`
 export year=`date +"%Y"`
 filename_1km="ftp://sidads.colorado.edu/pub/DATASETS/NOAA/G02156/1km/${year}/ims${year}${doy}_1km_v1.3.asc.gz"
+
+mkdir -p ${WORK_FOLDER}
+
+cd ${WORK_FOLDER} || { echo 'Cannot change to DATA folder' ; exit 1; }
 
 wget ${filename_1km}
 gunzip ims${year}${doy}_1km_v1.3.asc.gz
@@ -17,19 +24,18 @@ sed -ne '9031,17030p' ims${year}${doy}_1km_v1.3.asc | cut -c11001-19000 > ims_${
 
 rm ims${year}${doy}_1km_v1.3.asc
 
-#Now create the new plots
+# #Now create the new plots
+cp ${HOME_FOLDER}/*.py ${WORK_FOLDER}
+echo 'Starting plot script'
 python plot_data.py
 
-# First we have to clean the server remotely 
-ncftp altervista << EOF
-cd snow
-rm *.png
-bye
-EOF
+echo 'Finished plotting, uploading files'
 
-# Then upload the new one
+# # Then upload the new one
 ncftpput -R -v altervista snow ims*.png
 
-# Cleanup 
+# # Cleanup 
 rm ims_${year}_${doy}_1km.asc
 rm ims*.png
+
+cd -

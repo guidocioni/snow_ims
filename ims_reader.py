@@ -27,9 +27,10 @@ def read_lons_1km(path, filename='IMS1kmLons.24576x24576x1.double'):
     lons = np.reshape(data, [nx, ny], order='F')
   return(lons[min_ind_lats:max_ind_lats, min_ind_lons:max_ind_lons] + 90.)
 
+
 def read_coordinates_1km_compressed(path):
-  lons = pickle.load( open( "lon_1km.pickle", "rb" ) )
-  lats = pickle.load( open( "lat_1km.pickle", "rb" ) )
+  lons = pickle.load( open( path+"lon_1km.pickle", "rb" ) )
+  lats = pickle.load( open( path+"lat_1km.pickle", "rb" ) )
   return lons, lats
 
 
@@ -70,7 +71,9 @@ def read_data_1km_compressed(filename):
 
 def read_data_4km(year=2017, doy=300):
   nx = 6144
-  url = ("ftp://sidads.colorado.edu/pub/DATASETS/NOAA/G02156/4km/%s/ims%s%s_4km_v1.3.asc.gz" %
+#   url = ("ftp://sidads.colorado.edu/pub/DATASETS/NOAA/G02156/4km/%s/ims%s%s_4km_v1.3.asc.gz" %
+#          (year, year, doy))
+  url = ("https://usicecenter.gov/File/DownloadProduct?products=/ims/ims_v3/snow/6144asc/%s&fName=NIC.IMS_v3_%s%s00_4km.asc.gz" %
          (year, year, doy))
   widths = np.full((nx), 1, dtype=int).tolist()
   data = pd.read_fwf(url, skiprows=30, widths=widths,

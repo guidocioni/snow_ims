@@ -42,7 +42,7 @@ def get_projection(projection="eurasia"):
                            linewidth=0.3, labels=[False, False, False, False])
         bmap.drawmeridians(np.arange(-180., 181., 2.5),
                            linewidth=0.3, labels=[False, False, False, False])
-        bmap.readshapefile(shape_dir+'/ITA_adm_shp/ITA_adm1',
+        bmap.readshapefile(shape_dir+'/ITA_adm/ITA_adm1',
                            'ITA_adm1', linewidth=0.2, color='orange')
     elif projection == "alps":
         bmap = Basemap(projection="stere", lon_0=10.5, lat_0=45.8, boundinglat=0,
@@ -54,7 +54,7 @@ def get_projection(projection="eurasia"):
                            linewidth=0.3, labels=[False, False, False, False])
         bmap.drawmeridians(np.arange(-180., 181., 2.5),
                            linewidth=0.3, labels=[False, False, False, False])
-        bmap.readshapefile(shape_dir+'/ITA_adm_shp/ITA_adm1',
+        bmap.readshapefile(shape_dir+'/ITA_adm/ITA_adm1',
                            'ITA_adm1', linewidth=0.2, color='orange')
     else:
         raise ValueError(
