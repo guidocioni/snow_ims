@@ -5,22 +5,22 @@ cd "$(dirname "$0")";
 
 export QT_QPA_PLATFORM=offscreen
 export DISPLAY=localhost:0
-export WORK_FOLDER=/tmp/snow_ims/
+export WORK_FOLDER=/home/ekman/ssd/guido/snow-ims/
 export SHAPEFILES_FOLDER=/home/ekman/guido/icon_forecasts/plotting/shapefiles/
 export HOME_FOLDER=$(pwd)
 
 # Get doy 
 export doy=`date +"%j"`
 export year=`date +"%Y"`
-filename_1km="ftp://sidads.colorado.edu/pub/DATASETS/NOAA/G02156/1km/${year}/ims${year}${doy}_1km_v1.3.asc.gz"
+filename_1km="ftp://sidads.colorado.edu/pub/DATASETS/NOAA/G02156/1km/${year}/ims${year}${doy}_00UTC_1km_v1.3.asc.gz"
 
 mkdir -p ${WORK_FOLDER}
 
 cd ${WORK_FOLDER} || { echo 'Cannot change to DATA folder' ; exit 1; }
 
 wget ${filename_1km}
-gunzip ims${year}${doy}_1km_v1.3.asc.gz
-sed -ne '9031,17030p' ims${year}${doy}_1km_v1.3.asc | cut -c11001-19000 > ims_${year}_${doy}_1km.asc
+gunzip ims${year}${doy}_00UTC_1km_v1.3.asc.gz
+sed -ne '9031,17030p' ims${year}${doy}_00UTC_1km_v1.3.asc | cut -c11001-19000 > ims_${year}_${doy}_1km.asc
 
 rm ims${year}${doy}_1km_v1.3.asc
 
