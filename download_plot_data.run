@@ -22,7 +22,7 @@ wget ${filename_1km}
 gunzip ims${year}${doy}_00UTC_1km_v1.3.asc.gz
 sed -ne '9031,17030p' ims${year}${doy}_00UTC_1km_v1.3.asc | cut -c11001-19000 > ims_${year}_${doy}_1km.asc
 
-rm ims${year}${doy}_1km_v1.3.asc
+rm ims${year}${doy}_00UTC_1km_v1.3.asc
 
 # #Now create the new plots
 cp ${HOME_FOLDER}/*.py ${WORK_FOLDER}
